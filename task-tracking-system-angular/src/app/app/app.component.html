@@ -1,0 +1,33 @@
+
+
+<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
+    <div class="navbar-nav">
+        <p class="nav-item navbar-brand">Task Tracking System</p>
+        <a class="nav-item nav-link" routerLink="tasks">Tasks</a>
+        <a class="nav-item nav-link" routerLink="projects">Projects</a>
+        <a class="nav-item nav-link" routerLink="admin" *ngIf="userInfo.Role == 'manager' || userInfo.Role == 'admin'">Users</a>
+        <p class="nav-item navbar-text ml-5">Logged as: {{userInfo.Role}} | {{userInfo.Email}}</p>
+        <a class="nav-item nav-link" (click)="logout()">(Logout)</a>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="!currentUser">
+        <div class="navbar-nav">
+            <p class="nav-item navbar-brand">Task Tracking System</p>
+        </div>
+</nav>
+
+
+
+<!-- main content container -->
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
+

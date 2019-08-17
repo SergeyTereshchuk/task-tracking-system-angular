@@ -1,0 +1,103 @@
+<div *ngIf="newTab && (userInfo.Role == 'admin' || userInfo.Role == 'manager')">  
+    <h3>Create new task</h3>  
+    <form [formGroup]="newTaskForm" (ngSubmit)="onNewSubmit()">
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" formControlName="subject" class="form-control" [ngClass]="{ 'is-invalid': submitted && newf.subject.errors }" />
+            <div *ngIf="submitted && newf.subject.errors" class="invalid-feedback">
+                <div *ngIf="newf.name.errors.required">Task subject is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <input type="text" formControlName="status" class="form-control" [ngClass]="{ 'is-invalid': submitted && newf.status.errors }" />
+            <div *ngIf="submitted && newf.status.errors" class="invalid-feedback">
+                <div *ngIf="newf.status.errors.required">Task status is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="idProject">Task project Id</label>
+            <input type="text" formControlName="idProject" class="form-control" [ngClass]="{ 'is-invalid': submitted && newf.idProject.errors }" />
+            <div *ngIf="submitted && newf.idProject.errors" class="invalid-feedback">
+                <div *ngIf="newf.idProject.errors.required">Task project is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="idUser">Performer user Id</label>
+            <input type="text" formControlName="idUser" class="form-control" [ngClass]="{ 'is-invalid': submitted && newf.idUser.errors }" />
+            <div *ngIf="submitted && newf.idUser.errors" class="invalid-feedback">
+                <div *ngIf="newf.idUser.errors.required">Task performer is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">Deadline</label>
+            <input type="date" formControlName="endDate" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea formControlName="description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Create
+            </button>
+            <button type="button" class="btn btn-link" (click)="switchForms()">Switch to updating</button>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="updateTab && (userInfo.Role == 'admin' || userInfo.Role == 'manager')">  
+    <h3>Update existing task</h3>  
+    <form [formGroup]="updateTaskForm" (ngSubmit)="onUpdateSubmit()">
+        <div class="form-group">
+            <label for="id">Id</label>
+            <input type="text" formControlName="id" class="form-control" [ngClass]="{ 'is-invalid': submitted && updatef.id.errors }" />
+            <div *ngIf="submitted && updatef.id.errors" class="invalid-feedback">
+                <div *ngIf="updatef.id.errors.required">Task Id is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <input type="text" formControlName="status" class="form-control" [ngClass]="{ 'is-invalid': submitted && updatef.status.errors }" />
+            <div *ngIf="submitted && updatef.status.errors" class="invalid-feedback">
+                <div *ngIf="updatef.status.errors.required">Task status is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">Deadline</label>
+            <input type="date" formControlName="endDate" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea formControlName="description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Update
+            </button>
+            <button type="button" class="btn btn-link" (click)="switchForms()">Switch to creating</button>
+        </div>
+    </form>
+</div>
+
+<div *ngFor="let task of tasks">
+    <div class="card">
+        <p class="card-header bg-secondary text-white-50">
+            Task Id: {{task.Id}} Project Id: {{task.IdProject}} | Created at: {{task.StartDate | date}}
+            <a (click)="deleteTask(task.Id)" class="badge badge-pill badge-danger text-white" *ngIf="userInfo.Role == 'admin' || userInfo.Role == 'manager'">
+                Delete
+            </a>
+        </p>
+        <div class="card-body">
+            <h4 class="card-title">{{task.Subject}}</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngIf="userInfo.Role == 'admin' || userInfo.Role == 'manager'">Performer user Id: {{taskUserId(task)}}</li>
+                <li class="list-group-item">Task status: {{task.Status}}</li>
+                <li class="list-group-item">Deadline: {{task.EndDate | date}}</li>
+            </ul>
+            <p class="card-text">{{task.Description}}</p>
+        </div>
+    </div>
+</div>
